@@ -1,0 +1,34 @@
+﻿@page
+@using System.Data.SqlClient
+@{ 
+    try
+    {
+        string id = Request.Query["id"];
+        string addOrSubtract = Request.Query["addOrSubtract"];
+        String connectionStr = "Data Source=SASHA-PC;Initial Catalog=building;Integrated Security=True";
+        using (SqlConnection conn = new SqlConnection(connectionStr))
+        {
+
+            SqlCommand command = conn.CreateCommand();
+            command.CommandType = System.Data.CommandType.StoredProcedure;
+
+            conn.Open();
+
+            command.CommandText = "updateNumberOfGuests";
+
+
+            command.Parameters.AddWithValue("@id", id);
+            command.Parameters.AddWithValue("@addOrSubtract", @addOrSubtract);
+            //[dbo].[updateNumberOfGuests]
+            command.ExecuteNonQuery();
+
+        }
+
+    }
+    catch (Exception e)
+    {
+        Console.WriteLine(e.Message);
+        throw;
+    }
+    Response.Redirect("Index");
+}
